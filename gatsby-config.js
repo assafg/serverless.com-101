@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    name: `Fabian Schultz`,
+    name: `Assaf Gannon`,
     title: `Gatsby Deck`,
     date: `July 30, 2018`,
   },
