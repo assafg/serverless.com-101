@@ -1,83 +1,90 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, navigate, StaticQuery, graphql } from 'gatsby';
 import Helmet from 'react-helmet';
 import Swipeable from 'react-swipeable';
 import Transition from '../components/transition';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/darcula.css';
+import logo from '../resources/logo.png';
 
 import './index.css';
 
-const Header = ({ name, title, date }) => (
-  <header>
-    <Link to="/1">
-      <span>{name}</span> — {title}
-    </Link>
-    <time>{date}</time>
-  </header>
+const Footer = ({ name, title, date }) => (
+  <footer>
+    <img className="footer__logo" src={logo} />
+    <div>{title}</div>
+    <div />
+  </footer>
 );
 
-class TemplateWrapper extends Component {
-  NEXT = [13, 32, 39];
-  PREV = 37;
+function TemplateWrapper(props) {
+  const NEXT = [13, 32, 39];
+  const PREV = 37;
 
-  swipeLeft = () => {
-    this.navigate({ keyCode: this.NEXT[0] });
-  };
-
-  swipeRight = () => {
-    this.navigate({ keyCode: this.PREV });
-  };
-
-  navigate = ({ keyCode }) => {
-    const now = this.props.data.slide.index;
-    const slidesLength = this.props.slidesLength;
-
+  const doNavigate = ({ keyCode }) => {
+    const now = props.data.slide.index;
+    const slidesLength = props.slidesLength;
     if (now) {
-      if (keyCode === this.PREV && now === 1) {
+      if (keyCode === PREV && now === 1) {
         return false;
-      } else if (this.NEXT.indexOf(keyCode) !== -1 && now === slidesLength) {
+      } else if (NEXT.indexOf(keyCode) !== -1 && now === slidesLength) {
         return false;
-      } else if (this.NEXT.indexOf(keyCode) !== -1) {
+      } else if (NEXT.indexOf(keyCode) !== -1) {
         navigate(`/${now + 1}`);
-      } else if (keyCode === this.PREV) {
+      } else if (keyCode === PREV) {
         navigate(`/${now - 1}`);
       }
     }
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.navigate);
-  }
+  const swipeLeft = () => {
+    doNavigate({ keyCode: NEXT[0] });
+  };
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.navigate);
-  }
+  const swipeRight = () => {
+    doNavigate({ keyCode: PREV });
+  };
 
-  render() {
-    const { location, children, site } = this.props;
+  useEffect(() => {
+    hljs.initHighlighting();
+    return () => {
+      hljs.initHighlighting.called = false;
+    };
+  });
 
-    return (
-      <div>
-        <Helmet
-          title={`${site.siteMetadata.title} — ${site.siteMetadata.name}`}
-        />
-        <Header
-          name={site.siteMetadata.name}
-          title={site.siteMetadata.title}
-          date={site.siteMetadata.date}
-        />
-        <Swipeable
-          onSwipedLeft={this.swipeLeft}
-          onSwipedRight={this.swipeRight}
-        >
-          <Transition location={location}>
-            <div id="slide" style={{'width': '100%'}}>{children}</div>
-          </Transition>
-        </Swipeable>
-      </div>
-    );
-  }
+  useEffect(() => {
+    console.log('addEventListener');
+
+    document.addEventListener('keydown', doNavigate);
+
+    return () => {
+      document.removeEventListener('keydown', doNavigate);
+    };
+  }, []);
+
+  const { location, children, site } = props;
+  return (
+    <div>
+      <Helmet
+        title={`${site.siteMetadata.title} — ${site.siteMetadata.name}`}
+      />
+      <Swipeable onSwipedLeft={swipeLeft} onSwipedRight={swipeRight}>
+        <Transition location={location}>
+          <div id="slide" style={{ width: '100%' }}>
+            {children}
+          </div>
+        </Transition>
+      </Swipeable>
+      <Footer
+        name={site.siteMetadata.name}
+        title={site.siteMetadata.title}
+        date={site.siteMetadata.date}
+      />
+    </div>
+  );
 }
+// }
 
 TemplateWrapper.propTypes = {
   children: PropTypes.node,
