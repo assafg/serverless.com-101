@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { navigate, StaticQuery, graphql } from 'gatsby';
 import Helmet from 'react-helmet';
-import Swipeable from 'react-swipeable';
+import { Swipeable } from 'react-swipeable';
 import Transition from '../components/transition';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/darcula.css';
@@ -12,7 +12,7 @@ import './index.css';
 
 const Footer = ({ name, title, date }) => (
   <footer>
-    <img className="footer__logo" src={logo} />
+    <img className="footer__logo" src={logo} alt="Tikal" />
     <div>{title}</div>
     <div />
   </footer>
@@ -39,7 +39,7 @@ function TemplateWrapper(props) {
         }
       }
     },
-    [props.data.slide.index]
+    [props.data.slide.index, NEXT, props.slidesLength]
   );
 
   const swipeLeft = () => {
@@ -59,15 +59,13 @@ function TemplateWrapper(props) {
 
   useEffect(
     () => {
-      console.log('addEventListener');
-
       document.addEventListener('keydown', doNavigate);
 
       return () => {
         document.removeEventListener('keydown', doNavigate);
       };
     },
-    [props.data.slide.index]
+    [props.data.slide.index, doNavigate]
   );
 
   const { location, children, site } = props;
