@@ -178,3 +178,12 @@ header a:hover {
 header span {
   color: var(--text);
 }
+
+sidebyside {
+  display: flex;
+  justify-content: space-around;
+}
+
+sidebyside > div {
+  text-align: left;
+}

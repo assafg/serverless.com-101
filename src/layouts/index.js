@@ -1,6 +1,6 @@
-import React, { Component, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Link, navigate, StaticQuery, graphql } from 'gatsby';
+import { navigate, StaticQuery, graphql } from 'gatsby';
 import Helmet from 'react-helmet';
 import Swipeable from 'react-swipeable';
 import Transition from '../components/transition';
@@ -22,21 +22,25 @@ function TemplateWrapper(props) {
   const NEXT = [13, 32, 39];
   const PREV = 37;
 
-  const doNavigate = ({ keyCode }) => {
-    const now = props.data.slide.index;
-    const slidesLength = props.slidesLength;
-    if (now) {
-      if (keyCode === PREV && now === 1) {
-        return false;
-      } else if (NEXT.indexOf(keyCode) !== -1 && now === slidesLength) {
-        return false;
-      } else if (NEXT.indexOf(keyCode) !== -1) {
-        navigate(`/${now + 1}`);
-      } else if (keyCode === PREV) {
-        navigate(`/${now - 1}`);
+  const doNavigate = useCallback(
+    ({ keyCode }) => {
+      const now = props.data.slide.index;
+
+      const slidesLength = props.slidesLength;
+      if (now) {
+        if (keyCode === PREV && now === 1) {
+          return false;
+        } else if (NEXT.indexOf(keyCode) !== -1 && now === slidesLength) {
+          return false;
+        } else if (NEXT.indexOf(keyCode) !== -1) {
+          navigate(`/${now + 1}`);
+        } else if (keyCode === PREV) {
+          navigate(`/${now - 1}`);
+        }
       }
-    }
-  };
+    },
+    [props.data.slide.index]
+  );
 
   const swipeLeft = () => {
     doNavigate({ keyCode: NEXT[0] });
@@ -53,15 +57,18 @@ function TemplateWrapper(props) {
     };
   });
 
-  useEffect(() => {
-    console.log('addEventListener');
+  useEffect(
+    () => {
+      console.log('addEventListener');
 
-    document.addEventListener('keydown', doNavigate);
+      document.addEventListener('keydown', doNavigate);
 
-    return () => {
-      document.removeEventListener('keydown', doNavigate);
-    };
-  }, []);
+      return () => {
+        document.removeEventListener('keydown', doNavigate);
+      };
+    },
+    [props.data.slide.index]
+  );
 
   const { location, children, site } = props;
   return (
