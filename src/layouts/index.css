@@ -193,3 +193,12 @@ header span {
   height: 100%;
   justify-content: flex-start;
 }
+
+sidebyside {
+  display: flex;
+  justify-content: space-around;
+}
+
+sidebyside > div {
+  text-align: left;
+}

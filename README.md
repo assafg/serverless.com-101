@@ -22,6 +22,7 @@ $ gatsby new my-slides https://github.com/fabe/gatsby-starter-deck
 $ git clone git@github.com:fabe/gatsby-starter-deck.git my-slides
 $ cd my-slides
 $ yarn
+$ yarn develop
 ```
 
 ## Usage
@@ -54,9 +55,3 @@ Examples:
 
 ![Monkey](//i.imgur.com/PnbINJ6.gif)
 ```
-
-## Authors
-
-- Fabian Schultz ([@fschultz\_](https://twitter.com/fschultz_))
-- Frank Murphy ([AnIrishDuck](https://github.com/AnIrishDuck))
-- Stefan Probst ([stefanprobst](https://github.com/stefanprobst))
