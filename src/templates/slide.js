@@ -2,12 +2,12 @@ import React from 'react';
 import { graphql } from 'gatsby';
 
 export default ({ data, transition }) => (
-  <div style={{'width': '100%'}}>
     <div
       style={transition && transition.style}
       dangerouslySetInnerHTML={{ __html: data.slide.html }}
+      className="slide-content"
     />
-  </div>
+
 );
 
 export const query = graphql`

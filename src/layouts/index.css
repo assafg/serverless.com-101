@@ -2,9 +2,10 @@
   --bg: #fdfdfd;
   --meta: #888;
   --accent: #3178cd;
-  --text: black;
+  --text: #353535;
   --base: 1.5rem;
   --bg2: #f47620;
+  --light-text: #606060;
 }
 
 @media (max-width: 600px) {
@@ -52,10 +53,15 @@ html {
   -webkit-overflow-scrolling: touch;
 }
 
-#slide ul {
+#slide ul, #slide ol {
     text-align: left;
     margin-left: 32px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
 }
+
 
 a {
   color: var(--text);
@@ -130,7 +136,7 @@ h1 {
 
 h2 {
   font-size: 120%;
-
+  color: var(--light-text);
   margin-bottom: 0.5rem;
 }
 
@@ -177,4 +183,13 @@ header a:hover {
 
 header span {
   color: var(--text);
+}
+
+.slide-content {
+  width:100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
 }

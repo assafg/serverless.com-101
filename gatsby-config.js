@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     name: `Assaf Gannon`,
-    title: `Gatsby Demo Deck`,
+    title: `Tikal's Expert Academy ™ 2019`,
     date: `October 27, 2019`,
   },
   plugins: [
