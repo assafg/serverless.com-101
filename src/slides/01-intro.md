@@ -1,42 +1,5 @@
-# Introduction to WebApps
+# Who am I?
 
-An overview of modern WebApps
+This is an intro slide/s that can be copied to any deck
 
----
-
-# Code Example
-
-```javascript
-const Footer = ({ name, title, date }) => (
-  <footer>
-    <img className="footer__logo" src={logo} />
-    <div>{title}</div>
-    <div />
-  </footer>
-);
-```
-
----------------
-
-## Compare
-
-<sidebyside>
-<div>
-
-### Pro
-
-1. asasd
-2. dfsdfsdf
-3. sdfsdfs
-   
-</div>
-<div>
-
-### Con
-
-1. rrrrr
-2. ffffff
-3. bbbbbbb
-   
-</div>  
-</sidebyside>
+![Me](https://i2.wp.com/bestlifeonline.com/wp-content/uploads/2018/04/Animal-jokes-funny-sheep.jpg?resize=1024%2C683&ssl=1)
