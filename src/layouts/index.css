@@ -127,6 +127,8 @@ cite::before {
     content: '\2014\00a0';
 }
 
+img {
+    max-height: 500px;
 pre {
     font-size: 70%;
 
