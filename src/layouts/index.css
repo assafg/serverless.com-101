@@ -46,16 +46,19 @@ html {
     width: 100vw;
     height: 100vh;
     padding: 1rem;
-
     text-align: center;
-
     -webkit-overflow-scrolling: touch;
 }
 
 #slide ul,
 #slide ol {
     text-align: left;
-    margin-left: 32px;
+    margin: 32px;
+}
+
+li {
+    padding-left: 1rem;
+    line-height: 2rem;
 }
 
 a {
@@ -127,8 +130,6 @@ cite::before {
     content: '\2014\00a0';
 }
 
-img {
-    max-height: 500px;
 pre {
     font-size: 70%;
 
@@ -161,8 +162,11 @@ h1 {
 
 h2 {
     font-size: 120%;
-
     margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    /* position: fixed;
+    top: 0;
+    width: 100%; */
 }
 
 p {
@@ -193,6 +197,17 @@ footer {
     width: 2rem;
     height: 2rem;
     background-color: black;
+}
+
+img {
+    max-height: 500px;
+}
+
+.slide-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
 }
 
 header a,
