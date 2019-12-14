@@ -132,9 +132,10 @@ cite::before {
 
 pre {
     font-size: 70%;
+    max-width: 95vw;
 
     display: inline-block;
-    overflow-x: scroll;
+    overflow: scroll;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 
     text-align: left;
@@ -232,4 +233,9 @@ sidebyside {
 
 sidebyside > div {
     text-align: left;
+}
+
+sidebyside > pre {
+    max-width: 48vw;
+    margin-right: 1rem;
 }
