@@ -201,16 +201,43 @@ export SLS_DEBUG=* && node --inspect /usr/local/bin/serverless offline -s dev
 
 In chrome: `chrome://inspect`
 
----
-
-## Deployment (to AWS)
-
-1. Set up AWS credentials ([docs](https://serverless.com/framework/docs/providers/aws/guide/credentials/))
-2. `$ serverless deploy`
-
 
 ---
 
+## Create a new handler function to add/update an endpoint
+
+---
+
+```js
+// DB.js
+exports.updateEndpoint = endpoint => {
+    console.log("endpoint", endpoint);
+};
+
+// handler.js
+const DB = require('./DB');
+
+module.exports.updateEndpoint = async event => {
+    const endpoint = JSON.parse(event.body);
+
+    // Store in MongoDB
+    DB.updateEndpoint(endpoint);
+
+    return {
+        statusCode: 201,
+        body: JSON.stringify(
+            {
+                message: 'ok',
+            },
+            null,
+            2
+        ),
+    };
+};
+
+```
+
+---
 ## Adding a DB (MongoDB)
 
 Create a MongoDB account with [Atlas](https://cloud.mongodb.com/)
@@ -236,12 +263,53 @@ Create a new DB and collection
 database: 'Dashboard-<your-name>'
 collection: 'endpoints'
 ```
+---
+
+save the collection string as an env variable
+
+```yaml
+// serverless.yaml
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+# you can overwrite defaults here
+  stage: fs-demo-assaf
+  region: eu-central-1
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+
+```
 
 ---
 
-# Creating a function to add / update an endpoint
+## Connecting to the DB
+
+```
+npm i mongodb
+```
+
+```js
+const MongoClient = require('mongodb').MongoClient;
+const uri = process.env.MONGODB_URI; // Atlas connection string 
+console.log('uri', uri);
+
+const client = new MongoClient(uri, { useNewUrlParser: true });
+
+exports.updateEndpoint = async endpoint => {
+    console.log('endpoint', endpoint);
+    await client.connect();
+    const collection = client.db('dashboard-assaf').collection('endpoints');
+    await collection.insertOne(endpoint);
+    client.close();
+};
+
+```
 
 ---
 
-## Create a new handler function
+## Deployment (to AWS)
+
+1. Set up AWS credentials ([docs](https://serverless.com/framework/docs/providers/aws/guide/credentials/))
+2. `$ serverless deploy`
 
