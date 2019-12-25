@@ -207,3 +207,41 @@ In chrome: `chrome://inspect`
 
 1. Set up AWS credentials ([docs](https://serverless.com/framework/docs/providers/aws/guide/credentials/))
 2. `$ serverless deploy`
+
+
+---
+
+## Adding a DB (MongoDB)
+
+Create a MongoDB account with [Atlas](https://cloud.mongodb.com/)
+
+1. Register
+2. Create a FREE `Starter Cluster`
+3. Wait for the cluster to start (1-3 minutes)
+4. Connect to cluster
+   1. Whitelist your ip
+   2. Create a user
+   3. choose "Connect Your App"
+   4. Copy connection url
+
+---
+
+## Create a Database and Collection
+
+> Clusters -> Collections -> "add my own data"
+
+Create a new DB and collection
+
+```
+database: 'Dashboard-<your-name>'
+collection: 'endpoints'
+```
+
+---
+
+# Creating a function to add / update an endpoint
+
+---
+
+## Create a new handler function
+
