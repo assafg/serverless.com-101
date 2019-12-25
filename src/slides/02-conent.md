@@ -9,7 +9,7 @@ npm i -g serverless
 ## Create a project from a template
 
 ```bash
-serverless create --template aws-nodejs --path myService
+serverless create --template aws-nodejs --path <myService>
 ```
 
 ```
@@ -32,7 +32,7 @@ serverless create --template aws-nodejs --path myService
 
 ---
 
-handler.js
+## handler.js
 
 ```javascript
 'use strict';
@@ -182,6 +182,7 @@ functions:
 ## Offline work
 
 ```bash
+npm init
 npm install serverless-offline --save-dev
 ```
 
@@ -217,11 +218,13 @@ exports.updateEndpoint = endpoint => {
 // handler.js
 const DB = require('./DB');
 
-module.exports.updateEndpoint = async event => {
+module.exports.updateEndpoint = async (event, context) => {
+    context.callbackWaitsForEmptyEventLoop = false;
+
     const endpoint = JSON.parse(event.body);
 
     // Store in MongoDB
-    DB.updateEndpoint(endpoint);
+    await DB.updateEndpoint(endpoint);
 
     return {
         statusCode: 201,
@@ -236,6 +239,21 @@ module.exports.updateEndpoint = async event => {
 };
 
 ```
+---
+## Link the function in serverless.yaml
+
+```yaml
+...
+functions:
+  updateEndpoint:
+    handler: handler.updateEndpoint
+    events:
+      - http:
+          path: endpoint/update
+          method: post
+...
+```
+
 
 ---
 ## Adding a DB (MongoDB)
@@ -283,6 +301,16 @@ provider:
 
 ---
 
+```
+# Mac
+export MONGODB_URI=mongodb+srv://dbadmin:<password>@cluster0-takpx.mongodb.net/test?retryWrites=true&w=majority
+
+# Windows
+set MONGODB_URI mongodb+srv://dbadmin:<password>@cluster0-takpx.mongodb.net/test?retryWrites=true&w=majority
+```
+
+---
+
 ## Connecting to the DB
 
 ```
@@ -299,10 +327,31 @@ const client = new MongoClient(uri, { useNewUrlParser: true });
 exports.updateEndpoint = async endpoint => {
     console.log('endpoint', endpoint);
     await client.connect();
-    const collection = client.db('dashboard-assaf').collection('endpoints');
-    await collection.insertOne(endpoint);
+    const collection = client.db('dashboard-[your name]').collection('endpoints');
+    if (endpoint._id) {
+        await collection.updateOne({ _id: endpoint._id }, endpoint);
+    } else {
+        await collection.insertOne(endpoint);
+    }
     client.close();
 };
+```
+---
+
+## Get endpoints function
+
+Write a function that retrievs endpoints
+
+hint: add to serverless.yaml
+```yaml
+functions:
+  getEndpoints:
+  handler: handlers.getEvents
+  events:
+    - http:
+        path: endpoints
+        method: get
+        cors: true
 
 ```
 
