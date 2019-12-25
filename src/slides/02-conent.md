@@ -212,7 +212,10 @@ In chrome: `chrome://inspect`
 ```js
 // DB.js
 exports.updateEndpoint = endpoint => {
-    console.log("endpoint", endpoint);
+    return new Promise((resolve, reject) => {
+        console.log("endpoint", endpoint);
+        resolve();
+    })
 };
 
 // handler.js
@@ -319,22 +322,31 @@ npm i mongodb
 
 ```js
 const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.MONGODB_URI; // Atlas connection string 
-console.log('uri', uri);
-
+const uri = process.env.MONGODB_URI; // Atlas connection string
 const client = new MongoClient(uri, { useNewUrlParser: true });
 
 exports.updateEndpoint = async endpoint => {
-    console.log('endpoint', endpoint);
-    await client.connect();
-    const collection = client.db('dashboard-[your name]').collection('endpoints');
-    if (endpoint._id) {
-        await collection.updateOne({ _id: endpoint._id }, endpoint);
-    } else {
-        await collection.insertOne(endpoint);
-    }
-    client.close();
+    return new Promise((resolve, reject) => {
+        client.connect(err => {
+            if (err) {
+                reject(err);
+            }
+            const collection = client
+                .db('dashboard-assaf')
+                .collection('endpoints');
+
+            collection.insertOne(endpoint, err => {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                }
+                resolve();
+                client.close();
+            });
+        });
+    });
 };
+
 ```
 ---
 
